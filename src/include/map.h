@@ -7,8 +7,6 @@
 #include <fstream>
 #include <iostream>
 
-#include "imagebuffer.h"
-#include "graphics_utils.h"
 
 void load_map_from(const std::string& filename, std::vector<bool> &buf){
     std::fstream input_file(filename, std::ios::binary|std::ios::in);
@@ -52,17 +50,17 @@ public:
         load_map_from(filename, map_data);
     }
 
-    void random_fill(){
-
-        static auto get = std::bind(std::uniform_int_distribution<>(0, 1), std::default_random_engine());
-
-        for (auto && i : map_data){
-            i = bool( get() );
-        }
-    }
+//    void random_fill(){
+//
+//        static auto get = std::bind(std::uniform_int_distribution<>(0, 1), std::default_random_engine());
+//
+//        for (auto && i : map_data){
+//            i = bool( get() );
+//        }
+//    }
 
     bool get_section(size_t x , size_t y) const{
-        // assert(x < width && y < height);
+//         assert(x < width && y < height);
         if (!(x < width && y < height)){
             return true;
         }
@@ -70,20 +68,6 @@ public:
         size_t cx = x / sect_width;
         size_t cy = y / sect_height;
         return map_data[cx + cy * subdivsion];
-    }
-    
-    void draw(ImageBuffer& buffer){
-        for (size_t y=0; y<subdivsion; y++){
-            for(size_t x=0; x<subdivsion; x++){
-
-                size_t tx = x * sect_width;
-                size_t ty = y * sect_height;
-                uint32_t color = COLOR::WHITE;
-                if (map_data[x + y * subdivsion])
-                    color = COLOR::BLUE;
-                buffer.draw_rect(tx, ty, sect_width, sect_height, color);
-            }
-        }
     }
 
 };

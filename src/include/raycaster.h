@@ -4,14 +4,12 @@
 #include <vector>
 
 #include "map.h"
-#include "imagebuffer.h"
-#include "graphics_utils.h"
 
 #include "camera.h"
 
 
   /**
-   *  @brief Raycaster class.
+   *  @brief Raycast class.
    *
    *
    *  @tparam map  Map object.
@@ -19,72 +17,62 @@
    *  @tparam ray count
   */
 
-class Raycaster
+class Raycast
 {
     const Map* map;
     const Camera* camera;
     size_t ray_count;
 
 public:
-    Raycaster(const Map* map, const Camera* camera, size_t ray_count):
+    Raycast(const Map* map, const Camera* camera, size_t ray_count):
         map(map), camera(camera), ray_count(ray_count){}
 
-
-    float ray(size_t x, size_t y, float angle, float dt){
-
+    /**
+ *  @brief Ray function, cast one ray. Return ray length
+ *
+ *
+ *  @tparam x  x coord start point.
+ *  @tparam y   y coord start point.
+ *  @tparam angle angle of ray in radians
+ *  @tparam step  step of ray
+*/
+    float ray(size_t x, size_t y, float angle, float step=5){
         float cos_a = cos(angle);
         float sin_a = sin(angle);
         float length = 0;                  //Ray length
-
+        bool done = false;
         while(true){
             
             float cx = x + length * cos_a;
             float cy = y + length * sin_a;
 
             if (map->get_section(cx, cy)){
-                break;
+                if (done)
+                    break;
+                length =- step;
+                step = 0.05;
+                done = true;
             }
-            std::cout << length << std::endl;
-            length += dt;
+            length += step;
         }
 
-        return length * cos_a;
-    }
-    std::vector<float> raycast(){
-        return raycast(camera->x, camera->y, camera->angle);
+        return abs(length);
     }
 
-    std::vector<float> raycast(size_t x, size_t y, float angle){
+    std::vector<float> cast(){
         float fov = camera->fov;
         float half_fov = fov / 2;
-        float dt = fov / ray_count;
+        float da = fov / ray_count;
 
         std::vector<float> distances;
 
-        for (float ang =  -half_fov; ang<fov; ang += dt){
-
-
-            float distance = ray(x, y, angle + ang, 0.05);
-//            std::cout << "Ray:" << "(" << angle << ")" << "  -  ang (" << ang << ") - " << distance << std::endl;
-
-            distances.push_back(distance);
+        float angle = - -half_fov;
+        for (int i = 0; i < ray_count; i++){
+            float ray_angle = camera->angle + angle;
+            angle += da;
+            distances.push_back(ray(camera->x, camera->y, ray_angle));
         }
-        return std::move(distances);
+
+        return distances;
     }
-
-    void draw_raycast(ImageBuffer& buffer, std::vector<float> dist){
-
-
-        buffer.draw_rect(0, buffer.height / 2, buffer.width, buffer.height / 2, pack_color(100,100,100));
-
-        for ( size_t i=0; i<dist.size(); i++){
-
-            float d = dist[i];
-
-            d = (buffer.height * buffer.height) / (d * d); 
-
-            buffer.draw_rect(i, (buffer.height/2)-d/2, 1, d, pack_color(0, 0, 255) );
-        }
-    }
-
 };

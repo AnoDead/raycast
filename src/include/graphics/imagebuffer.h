@@ -8,36 +8,36 @@
 #include "graphics_utils.h"
 
 
-class RawImageData{
-private:
-    uint32_t* buffer = nullptr;
-    size_t width{};
-    size_t height{};
-public:
-    RawImageData(size_t w, size_t h):width(w), height(h){
-        buffer = new uint32_t[w*h];
-    }
-
-//    Copy Constructor
-//    RawImageData(RawImageData& copy){
-//        delete [] buffer;
-//        RawImageData(copy.width, copy.height);
-//        memcpy((void*)&buffer, (void*)&copy.buffer, sizeof(uint32_t)*width*height);
+//class RawImageData{
+//private:
+//    uint32_t* buffer = nullptr;
+//    size_t width{};
+//    size_t height{};
+//public:
+//    RawImageData(size_t w, size_t h):width(w), height(h){
+//        buffer = new uint32_t[w*h];
 //    }
-
-    RawImageData(RawImageData&& rvalue) noexcept :buffer(rvalue.buffer), width(rvalue.width), height(rvalue.height){
-        rvalue.buffer = nullptr;
-
-    }
-
-    ~RawImageData(){
-        delete [] buffer;
-    }
-
-    uint32_t& operator[] (const size_t index){
-        return buffer[index];
-    }
-};
+//
+////    Copy Constructor
+////    RawImageData(RawImageData& copy){
+////        delete [] buffer;
+////        RawImageData(copy.width, copy.height);
+////        memcpy((void*)&buffer, (void*)&copy.buffer, sizeof(uint32_t)*width*height);
+////    }
+//
+//    RawImageData(RawImageData&& rvalue) noexcept :buffer(rvalue.buffer), width(rvalue.width), height(rvalue.height){
+//        rvalue.buffer = nullptr;
+//
+//    }
+//
+//    ~RawImageData(){
+//        delete [] buffer;
+//    }
+//
+//    uint32_t& operator[] (const size_t index){
+//        return buffer[index];
+//    }
+//};
 
 class ImageBuffer
 {

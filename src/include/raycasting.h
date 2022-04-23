@@ -8,8 +8,8 @@
 
     #include "camera.h"
     #include "map.h"
-    #include "graphics_utils.h"
-    #include "imagebuffer.h"
+//    #include "graphics_utils.h"
+//    #include "imagebuffer.h"
     #include "math_utils.h"
     #include "raycaster.h"
 
