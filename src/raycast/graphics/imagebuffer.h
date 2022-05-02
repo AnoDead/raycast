@@ -55,6 +55,7 @@ public:
     void set_pixel(size_t x, size_t y, uint32_t color);
     void clear();
     void draw_rect(size_t x, size_t y, size_t w, size_t h, uint32_t color);
+    void draw_line(int32_t x1, int32_t y1, int32_t x2, int32_t y2, int32_t color);
 
     void drop_to_ppm(std::string filename);
 };
@@ -93,6 +94,19 @@ void ImageBuffer::clear()
 void ImageBuffer::draw_rect(size_t x, size_t y, size_t w, size_t h, uint32_t color)
 {
     draw_rectangle(buffer, width, height, x, y, w, h, color);
+}
+
+void ImageBuffer::draw_line(int32_t x1, int32_t y1, int32_t x2, int32_t y2, int32_t color){
+    float dX, dY, L;
+    L = std::max(abs(x2 - x1), abs(y2 - y1));
+    dX = (x2 - x1) / L;
+    dY = (y2 - y1) / L;
+    float cx(x1), cy(y1);
+    for (int i(0); i< L; i++){
+        set_pixel(cx, cy, color);
+        cx += dX;
+        cy += dY;
+    }
 }
 
 
