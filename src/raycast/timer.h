@@ -1,16 +1,17 @@
 #pragma once
  
-#include <chrono> // для функций из std::chrono
- 
+#include <chrono> 
+
+using namespace std::chrono;
+
 class Timer
 {
 private:
-	// Псевдонимы типов используются для удобного доступа к вложенным типам
-	using clock_t = std::chrono::high_resolution_clock;
-	using second_t = std::chrono::duration<double, std::ratio<1> >;
+
+	using clock_t = high_resolution_clock;
 	
-	std::chrono::time_point<clock_t> m_beg;
- 
+	time_point<clock_t> m_beg;
+
 public:
 	Timer() : m_beg(clock_t::now())
 	{
@@ -22,8 +23,8 @@ public:
 	}
 	
 	double elapsed() const
-	{
-		return std::chrono::duration_cast<second_t>(clock_t::now() - m_beg).count();
+	{ 
+		return duration_cast<milliseconds>(clock_t::now() - m_beg).count();
 	}
 };
 

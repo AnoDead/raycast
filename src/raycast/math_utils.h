@@ -2,10 +2,10 @@
 
 #include <cmath>
 
-inline float rad_to_deg(float rad){
+inline float to_degress(float rad){
     return (float)((rad * 180) / M_PI);
 }
 
-inline float deg_to_rad(float deg){
+inline float to_radians(float deg){
     return (float)((deg * M_PI) / 180);
 }
